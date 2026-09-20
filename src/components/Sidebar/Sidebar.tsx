@@ -67,7 +67,7 @@ export function Sidebar() {
           aria-expanded={sidebarOpen}
           aria-controls="component-drawer"
           onClick={() => setSidebarOpen(true)}
-          inert={sidebarOpen}
+          inert={sidebarOpen ? true : undefined}
           sx={{
             position: 'absolute',
             top: `calc(12px + ${SAFE_TOP})`,
@@ -79,6 +79,7 @@ export function Sidebar() {
             backgroundColor: tokens.surface,
             boxShadow: tokens.shadow.control,
             opacity: sidebarOpen ? 0 : 1,
+            pointerEvents: sidebarOpen ? 'none' : 'auto',
             transition: `opacity 140ms ease, background-color 140ms ease, transform 140ms ${EASE_OUT}`,
           }}
         >
@@ -108,7 +109,7 @@ export function Sidebar() {
         id="component-drawer"
         aria-label="Components"
         elevation={0}
-        inert={state === 'closed'}
+        inert={state === 'closed' ? true : undefined}
         data-no-drop
         sx={{
           position: isMobile ? 'fixed' : 'absolute',

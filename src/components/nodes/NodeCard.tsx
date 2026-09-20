@@ -128,7 +128,7 @@ export function NodeCard({
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     event.stopPropagation();
-    if (event.key === 'Enter' && !event.shiftKey) {
+    if (event.key === 'Escape' || (event.key === 'Enter' && !event.shiftKey)) {
       event.currentTarget.blur();
     }
   };
