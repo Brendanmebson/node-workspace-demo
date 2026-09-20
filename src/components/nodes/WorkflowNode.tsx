@@ -31,7 +31,10 @@ const Port = styled(Handle)({
   borderRadius: '50%',
   backgroundColor: tokens.surface,
   transition: `scale 140ms ${EASE_OUT}, background-color 140ms ease, border-color 140ms ease`,
-  '&::after': { content: '""', position: 'absolute', inset: -10, borderRadius: '50%' },
+  '&::after': { content: '""', position: 'absolute', inset: -12, borderRadius: '50%' },
+  '@media (pointer: coarse)': {
+    '&::after': { inset: -16 }, // 46px touch target area for fingers on mobile
+  },
   '&[data-connected="true"]': { backgroundColor: tokens.ink },
   '&:hover, &.connectingto.valid': {
     scale: '1.3',
@@ -52,8 +55,15 @@ const MenuButton = styled(IconButton)({
   transition: `opacity 140ms ease, background-color 140ms ease`,
   '.wf-node:hover &, .wf-node:focus-within &, .wf-node[data-selected="true"] &, &[aria-expanded="true"]':
     { opacity: 1 },
-  // No hover on touch screens, so keep the button visible.
+  // No hover on touch screens, so keep the button visible and enlarge touch target.
   '@media (hover: none)': { opacity: 1 },
+  '@media (pointer: coarse)': {
+    opacity: 1,
+    width: 36,
+    height: 36,
+    marginTop: -18,
+    right: 4,
+  },
 });
 
 function WorkflowNodeView({ id, type, data, selected }: NodeProps<WorkflowNodeType>) {

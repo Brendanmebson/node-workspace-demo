@@ -65,6 +65,9 @@ const EditableText = styled('input')({
     boxShadow: `0 0 0 1.5px ${tokens.accent}`,
   },
   '&::placeholder': { color: tokens.inkMuted },
+  '@media (pointer: coarse), (max-width: 600px)': {
+    fontSize: '16px', // Prevents iOS Safari from auto-zooming viewport on focus
+  },
 });
 
 const EditableTextArea = styled('textarea')({
@@ -89,6 +92,9 @@ const EditableTextArea = styled('textarea')({
     boxShadow: `0 0 0 1.5px ${tokens.accent}`,
   },
   '&::placeholder': { color: tokens.inkMuted },
+  '@media (pointer: coarse), (max-width: 600px)': {
+    fontSize: '16px', // Prevents iOS Safari from auto-zooming viewport on focus
+  },
 });
 
 interface NodeCardProps {
@@ -126,6 +132,10 @@ export function NodeCard({
     event.stopPropagation();
   };
 
+  const handleTouch = (event: React.TouchEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    event.stopPropagation();
+  };
+
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     event.stopPropagation();
     if (event.key === 'Escape' || (event.key === 'Enter' && !event.shiftKey)) {
@@ -150,6 +160,8 @@ export function NodeCard({
             onChange={handleInputChange(onLabelChange)}
             onMouseDown={handleInputMouseDown}
             onClick={handleInputClick}
+            onTouchStart={handleTouch}
+            onTouchEnd={handleTouch}
             onKeyDown={handleKeyDown}
             onPointerDown={handleInputMouseDown as never}
           />
@@ -169,6 +181,8 @@ export function NodeCard({
             onChange={handleInputChange(onDescriptionChange)}
             onMouseDown={handleInputMouseDown}
             onClick={handleInputClick}
+            onTouchStart={handleTouch}
+            onTouchEnd={handleTouch}
             onKeyDown={handleKeyDown}
             onPointerDown={handleInputMouseDown as never}
           />

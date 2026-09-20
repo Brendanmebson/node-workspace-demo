@@ -152,7 +152,12 @@ export function DragProvider({ children }: { children: ReactNode }) {
         if (e.pointerId !== pointerId) return;
         const wasActive = active;
         cleanup();
-        if (wasActive && isOverCanvas(e.clientX, e.clientY)) drop(item, e.clientX, e.clientY);
+        if (wasActive) {
+          if (isOverCanvas(e.clientX, e.clientY)) drop(item, e.clientX, e.clientY);
+        } else {
+          // A quick tap adds the component directly to the canvas center.
+          placeAtCenter(item);
+        }
       }
 
       function onCancel(e: PointerEvent) {
