@@ -22,7 +22,7 @@
   stroke: #0b7a67;
   stroke-width: 2;
   stroke-linecap: round;
-  stroke-dasharray: 6 5;
+  stroke-dasharray: 14 4;
   animation: wf-dash 500ms linear infinite;
 }
 
@@ -37,9 +37,7 @@
 }
 
 .react-flow__attribution {
-  background: rgba(255, 255, 255, 0.7);
-  border-radius: 6px;
-  margin: 0 0 12px 12px;
+  display: none !important;
 }
 
 /* While a sidebar item is being dragged, every surface shows the same cursor. */

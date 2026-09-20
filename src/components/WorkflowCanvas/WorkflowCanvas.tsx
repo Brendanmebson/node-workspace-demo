@@ -57,7 +57,7 @@ export function WorkflowCanvas() {
         minZoom={0.25}
         maxZoom={2}
         zoomOnDoubleClick={false}
-        attributionPosition="bottom-left"
+        proOptions={{ hideAttribution: true }}
         style={{ backgroundColor: tokens.canvas }}
       >
         <Background variant={BackgroundVariant.Dots} gap={20} size={1.6} color={tokens.canvasDot} />

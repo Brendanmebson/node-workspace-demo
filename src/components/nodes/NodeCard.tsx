@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import type { ReactNode } from 'react';
+import type { ChangeEvent, ReactNode } from 'react';
 import { nodeIcons } from '../../data/components';
 import { categoryTint, EASE_OUT, NODE_HEIGHT, NODE_WIDTH, tokens } from '../../theme/tokens';
 import type { NodeCategory } from '../../types/workflow';
@@ -44,6 +44,53 @@ const Shell = styled('div', {
   }),
 }));
 
+const EditableText = styled('input')({
+  width: '100%',
+  border: 'none',
+  background: 'transparent',
+  padding: '1px 4px',
+  margin: '-1px -4px',
+  borderRadius: 4,
+  color: tokens.ink,
+  font: 'inherit',
+  fontWeight: 600,
+  fontSize: '0.925rem',
+  outline: 'none',
+  transition: 'background-color 140ms ease, box-shadow 140ms ease',
+  '&:hover': {
+    backgroundColor: 'rgba(0, 0, 0, 0.04)',
+  },
+  '&:focus': {
+    backgroundColor: '#ffffff',
+    boxShadow: `0 0 0 1.5px ${tokens.accent}`,
+  },
+  '&::placeholder': { color: tokens.inkMuted },
+});
+
+const EditableTextArea = styled('textarea')({
+  width: '100%',
+  border: 'none',
+  background: 'transparent',
+  padding: '1px 4px',
+  margin: '-1px -4px',
+  borderRadius: 4,
+  resize: 'none',
+  color: tokens.ink,
+  font: 'inherit',
+  fontSize: '0.8rem',
+  lineHeight: 1.3,
+  outline: 'none',
+  transition: 'background-color 140ms ease, box-shadow 140ms ease',
+  '&:hover': {
+    backgroundColor: 'rgba(0, 0, 0, 0.04)',
+  },
+  '&:focus': {
+    backgroundColor: '#ffffff',
+    boxShadow: `0 0 0 1.5px ${tokens.accent}`,
+  },
+  '&::placeholder': { color: tokens.inkMuted },
+});
+
 interface NodeCardProps {
   label: string;
   description?: string;
@@ -51,6 +98,8 @@ interface NodeCardProps {
   category: NodeCategory;
   selected?: boolean;
   animateIn?: boolean;
+  onLabelChange?: (value: string) => void;
+  onDescriptionChange?: (value: string) => void;
   /** Handles and the options button. */
   children?: ReactNode;
 }
@@ -63,17 +112,67 @@ export function NodeCard({
   category,
   selected,
   animateIn,
+  onLabelChange,
+  onDescriptionChange,
   children,
 }: NodeCardProps) {
   const Icon = iconKey ? nodeIcons[iconKey] : undefined;
+
+  const handleInputClick = (event: React.MouseEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    event.stopPropagation();
+  };
+
+  const handleInputMouseDown = (event: React.MouseEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    event.stopPropagation();
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    event.stopPropagation();
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.currentTarget.blur();
+    }
+  };
+
+  const handleInputChange =
+    (onChange?: (value: string) => void) => (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      onChange?.(event.target.value);
+    };
+
   return (
     <Shell className="wf-node" data-selected={selected ? 'true' : 'false'} animateIn={animateIn}>
       <IconTile category={category}>{Icon ? <Icon /> : null}</IconTile>
-      <Box sx={{ minWidth: 0, flex: 1 }}>
-        <Typography variant="subtitle1" noWrap>
-          {label}
-        </Typography>
-        {description ? (
+      <Box sx={{ minWidth: 0, flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        {onLabelChange ? (
+          <EditableText
+            className="nodrag nopan"
+            value={label}
+            aria-label="Node name"
+            onChange={handleInputChange(onLabelChange)}
+            onMouseDown={handleInputMouseDown}
+            onClick={handleInputClick}
+            onKeyDown={handleKeyDown}
+            onPointerDown={handleInputMouseDown as never}
+          />
+        ) : (
+          <Typography variant="subtitle1" noWrap>
+            {label}
+          </Typography>
+        )}
+
+        {onDescriptionChange ? (
+          <EditableTextArea
+            className="nodrag nopan"
+            value={description ?? ''}
+            rows={2}
+            placeholder="Add a description"
+            aria-label="Node description"
+            onChange={handleInputChange(onDescriptionChange)}
+            onMouseDown={handleInputMouseDown}
+            onClick={handleInputClick}
+            onKeyDown={handleKeyDown}
+            onPointerDown={handleInputMouseDown as never}
+          />
+        ) : description ? (
           <Typography variant="body2" color="text.secondary" noWrap>
             {description}
           </Typography>

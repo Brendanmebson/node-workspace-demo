@@ -16,7 +16,7 @@ import {
   type ReactNode,
 } from 'react';
 import { catalogByType } from '../data/components';
-import type { WorkflowEdge, WorkflowNode } from '../types/workflow';
+import type { WorkflowEdge, WorkflowNode, WorkflowNodeData } from '../types/workflow';
 
 interface WorkflowContextValue {
   nodes: WorkflowNode[];
@@ -28,6 +28,7 @@ interface WorkflowContextValue {
   setSidebarOpen: (open: boolean) => void;
   selectedNode: WorkflowNode | null;
   addNode: (type: string, position: XYPosition) => void;
+  updateNodeData: (id: string, data: Partial<WorkflowNodeData>) => void;
   duplicateNode: (id: string) => void;
   deleteNode: (id: string) => void;
   deleteEdge: (id: string) => void;
@@ -70,6 +71,25 @@ export function WorkflowProvider({ children }: { children: ReactNode }) {
         data: { label: item.label, description: item.description, icon: item.icon },
       };
       setNodes((current) => [...current.map((n) => (n.selected ? { ...n, selected: false } : n)), node]);
+    },
+    [setNodes],
+  );
+
+  const updateNodeData = useCallback(
+    (id: string, data: Partial<WorkflowNodeData>) => {
+      setNodes((current) =>
+        current.map((node) =>
+          node.id === id
+            ? {
+                ...node,
+                data: {
+                  ...node.data,
+                  ...data,
+                },
+              }
+            : node,
+        ),
+      );
     },
     [setNodes],
   );
@@ -119,6 +139,7 @@ export function WorkflowProvider({ children }: { children: ReactNode }) {
       setSidebarOpen,
       selectedNode,
       addNode,
+      updateNodeData,
       duplicateNode,
       deleteNode,
       deleteEdge,
@@ -132,6 +153,7 @@ export function WorkflowProvider({ children }: { children: ReactNode }) {
       sidebarOpen,
       selectedNode,
       addNode,
+      updateNodeData,
       duplicateNode,
       deleteNode,
       deleteEdge,

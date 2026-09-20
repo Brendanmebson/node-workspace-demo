@@ -57,7 +57,7 @@ const MenuButton = styled(IconButton)({
 });
 
 function WorkflowNodeView({ id, type, data, selected }: NodeProps<WorkflowNodeType>) {
-  const { duplicateNode, deleteNode } = useWorkflow();
+  const { duplicateNode, deleteNode, updateNodeData } = useWorkflow();
   const [anchor, setAnchor] = useState<HTMLElement | null>(null);
   const hasInput = useNodeConnections({ handleType: 'target' }).length > 0;
   const hasOutput = useNodeConnections({ handleType: 'source' }).length > 0;
@@ -78,6 +78,8 @@ function WorkflowNodeView({ id, type, data, selected }: NodeProps<WorkflowNodeTy
       category={category}
       selected={selected}
       animateIn
+      onLabelChange={(label) => updateNodeData(id, { label })}
+      onDescriptionChange={(description) => updateNodeData(id, { description })}
     >
       <Port type="target" position={Position.Left} data-connected={hasInput} />
       <Port type="source" position={Position.Right} data-connected={hasOutput} />

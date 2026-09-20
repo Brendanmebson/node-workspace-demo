@@ -68,6 +68,7 @@ export function DeletableEdge({
           style={{
             stroke: selected ? tokens.accent : hovered ? tokens.ink : tokens.edge,
             strokeWidth: selected ? 2.25 : 1.75,
+            strokeDasharray: '14 4',
             strokeLinecap: 'round',
             transition: 'stroke 140ms ease, stroke-width 140ms ease',
           }}
