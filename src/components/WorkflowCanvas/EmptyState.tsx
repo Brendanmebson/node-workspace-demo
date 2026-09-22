@@ -39,12 +39,12 @@ export function EmptyState({ visible }: { visible: boolean }) {
           <AccountTreeOutlined />
         </Box>
         <Typography variant="h6" component="p" sx={{ fontSize: 17 }}>
-          Start building your workflow
+          Drag & Drop Circles
         </Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mt: 0.75, fontSize: 14, textWrap: 'balance' }}>
           {coarse
-            ? 'Open the menu, then press and hold a component and drag it here.'
-            : 'Drag a component from the sidebar and drop it here.'}
+            ? 'Drag circle nodes from the menu onto the workspace and connect their dots together.'
+            : 'Drag circle nodes from the left menu onto the workspace and drag from dot to dot to connect them.'}
         </Typography>
       </Box>
     </Box>

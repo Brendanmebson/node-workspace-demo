@@ -46,8 +46,33 @@ function createId(type: string) {
   return `${type}-${random}`;
 }
 
+const initialNodes: WorkflowNode[] = [
+  {
+    id: 'circle-1-initial',
+    type: 'circle-1',
+    position: { x: 250, y: 200 },
+    data: {
+      label: 'Circle 1',
+      description: 'Circular node with connecting dots',
+      color: '#0B7A67',
+      bgGradient: 'linear-gradient(135deg, #FFFFFF 0%, #E6F4F1 100%)',
+    },
+  },
+  {
+    id: 'circle-2-initial',
+    type: 'circle-2',
+    position: { x: 550, y: 200 },
+    data: {
+      label: 'Circle 2',
+      description: 'Circular node with connecting dots',
+      color: '#4F46E5',
+      bgGradient: 'linear-gradient(135deg, #FFFFFF 0%, #EEF2FF 100%)',
+    },
+  },
+];
+
 export function WorkflowProvider({ children }: { children: ReactNode }) {
-  const [nodes, setNodes, onNodesChange] = useNodesState<WorkflowNode>([]);
+  const [nodes, setNodes, onNodesChange] = useNodesState<WorkflowNode>(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState<WorkflowEdge>([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -55,7 +80,7 @@ export function WorkflowProvider({ children }: { children: ReactNode }) {
 
   const onConnect = useCallback(
     (connection: Connection) =>
-      setEdges((current) => addEdge({ ...connection, type: 'deletable' }, current)),
+      setEdges((current) => addEdge({ ...connection, type: 'deletable', animated: true }, current)),
     [setEdges],
   );
 
@@ -68,12 +93,19 @@ export function WorkflowProvider({ children }: { children: ReactNode }) {
         type,
         position,
         selected: true,
-        data: { label: item.label, description: item.description, icon: item.icon },
+        data: {
+          label: item.label,
+          description: item.description,
+          icon: item.icon,
+          color: item.color,
+          bgGradient: item.bgGradient,
+        },
       };
       setNodes((current) => [...current.map((n) => (n.selected ? { ...n, selected: false } : n)), node]);
     },
     [setNodes],
   );
+
 
   const updateNodeData = useCallback(
     (id: string, data: Partial<WorkflowNodeData>) => {

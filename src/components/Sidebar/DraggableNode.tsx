@@ -1,13 +1,11 @@
 import DragIndicatorOutlined from '@mui/icons-material/DragIndicatorOutlined';
 import Box from '@mui/material/Box';
-import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
+import { styled } from '@mui/material/styles';
 import type { KeyboardEvent } from 'react';
 import { useDrag } from '../../context/DragContext';
-import { nodeIcons } from '../../data/components';
 import { EASE_OUT, tokens } from '../../theme/tokens';
 import type { CatalogItem } from '../../types/workflow';
-import { IconTile } from '../nodes/NodeCard';
 
 const Item = styled('div')({
   display: 'flex',
@@ -19,7 +17,6 @@ const Item = styled('div')({
   userSelect: 'none',
   WebkitUserSelect: 'none',
   WebkitTouchCallout: 'none',
-  // Vertical swipes still scroll the list. A touch drag starts after a short hold.
   touchAction: 'pan-y',
   transition: `background-color 140ms ease, transform 160ms ${EASE_OUT}, opacity 140ms ease`,
   '&:hover': { backgroundColor: tokens.surfaceHover },
@@ -32,13 +29,14 @@ const Item = styled('div')({
 export function DraggableNode({ item, dragging }: { item: CatalogItem; dragging: boolean }) {
   const { beginDrag, placeAtCenter } = useDrag();
 
-  // Keyboard alternative to dragging, so the list stays usable without a pointer.
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
       placeAtCenter(item);
     }
   };
+
+  const color = item.color || tokens.accent;
 
   return (
     <Item
@@ -50,17 +48,79 @@ export function DraggableNode({ item, dragging }: { item: CatalogItem; dragging:
       onKeyDown={onKeyDown}
       onContextMenu={(event) => event.preventDefault()}
     >
-      <IconTile category={item.category} size={38} aria-hidden>
-        <IconFor iconKey={item.icon} />
-      </IconTile>
+      {/* Circle Preview with Connection Dots */}
+      <Box
+        sx={{
+          position: 'relative',
+          width: 48,
+          height: 48,
+          borderRadius: '50%',
+          backgroundColor: tokens.surface,
+          border: `2px solid ${color}`,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexShrink: 0,
+          boxShadow: `0 2px 6px ${color}25`,
+        }}
+      >
+        {/* Left Dot Handle */}
+        <Box
+          sx={{
+            position: 'absolute',
+            left: -5,
+            top: '50%',
+            transform: 'translateY(-50%)',
+            width: 10,
+            height: 10,
+            borderRadius: '50%',
+            backgroundColor: color,
+            border: `2px solid ${tokens.surface}`,
+          }}
+        />
+
+        <Box
+          sx={{
+            width: 28,
+            height: 28,
+            borderRadius: '50%',
+            backgroundColor: color,
+            color: '#FFF',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontWeight: 700,
+            fontSize: '0.85rem',
+          }}
+        >
+          {item.label.charAt(0).toUpperCase()}
+        </Box>
+
+        {/* Right Dot Handle */}
+        <Box
+          sx={{
+            position: 'absolute',
+            right: -5,
+            top: '50%',
+            transform: 'translateY(-50%)',
+            width: 10,
+            height: 10,
+            borderRadius: '50%',
+            backgroundColor: color,
+            border: `2px solid ${tokens.surface}`,
+          }}
+        />
+      </Box>
+
       <Box sx={{ minWidth: 0, flex: 1 }}>
-        <Typography variant="subtitle1" noWrap>
+        <Typography variant="subtitle1" sx={{ fontWeight: 600, fontSize: '0.95rem' }} noWrap>
           {item.label}
         </Typography>
-        <Typography variant="body2" color="text.secondary" noWrap>
+        <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.8rem' }} noWrap>
           {item.description}
         </Typography>
       </Box>
+
       <DragIndicatorOutlined
         className="drag-grip"
         aria-hidden
@@ -68,10 +128,4 @@ export function DraggableNode({ item, dragging }: { item: CatalogItem; dragging:
       />
     </Item>
   );
-}
-
-
-function IconFor({ iconKey }: { iconKey: string }) {
-  const Icon = nodeIcons[iconKey];
-  return Icon ? <Icon /> : null;
 }

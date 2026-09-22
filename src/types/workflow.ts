@@ -8,6 +8,8 @@ export type WorkflowNodeData = {
   description?: string;
   /** Key into `nodeIcons` (see data/components.ts). */
   icon?: string;
+  color?: string;
+  bgGradient?: string;
 };
 
 export type WorkflowNode = Node<WorkflowNodeData>;
@@ -20,4 +22,7 @@ export interface CatalogItem {
   description: string;
   category: NodeCategory;
   icon: string;
+  color?: string;
+  bgGradient?: string;
 }
+
