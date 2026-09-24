@@ -74,7 +74,7 @@ const initialNodes: WorkflowNode[] = [
 export function WorkflowProvider({ children }: { children: ReactNode }) {
   const [nodes, setNodes, onNodesChange] = useNodesState<WorkflowNode>(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState<WorkflowEdge>([]);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const selectedNode = useMemo(() => nodes.find((n) => n.selected) ?? null, [nodes]);
 
