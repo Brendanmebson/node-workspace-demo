@@ -33,29 +33,22 @@ export function Sidebar() {
       elevation={0}
       data-no-drop
       sx={{
-        position: isMobile ? 'fixed' : 'absolute',
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        height: '100%',
         zIndex: zIndex.panel,
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden',
         width: panelWidth,
+        borderRadius: 0,
+        borderRight: `1px solid ${tokens.hairline}`,
         boxShadow: tokens.shadow.panel,
-        ...(isMobile
-          ? {
-              top: 0,
-              bottom: 0,
-              left: 0,
-              borderRadius: '0 16px 16px 0',
-              paddingTop: SAFE_TOP,
-              paddingLeft: SAFE_LEFT,
-              paddingBottom: 'env(safe-area-inset-bottom, 0px)',
-            }
-          : {
-              top: 12,
-              left: 12,
-              maxHeight: 'calc(100% - 24px)',
-              borderRadius: '16px',
-            }),
+        paddingTop: isMobile ? SAFE_TOP : '12px',
+        paddingLeft: isMobile ? SAFE_LEFT : 0,
+        paddingBottom: isMobile ? 'env(safe-area-inset-bottom, 0px)' : '12px',
         ...(state === 'open' && {
           transform: 'none',
           opacity: 1,
